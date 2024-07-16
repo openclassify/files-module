@@ -6,6 +6,7 @@ use Anomaly\FilesModule\Folder\Contract\FolderInterface;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Validation\Factory;
+use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -62,9 +63,9 @@ class FileUploader
      * @param FileRepositoryInterface $files
      */
     public function __construct(
-        Factory $validator,
-        FileRotator $rotator,
-        FilesystemManager $manager,
+        Factory                 $validator,
+        FileRotator             $rotator,
+        FilesystemManager       $manager,
         FileRepositoryInterface $files
     )
     {
@@ -72,6 +73,41 @@ class FileUploader
         $this->manager = $manager;
         $this->rotator = $rotator;
         $this->validator = $validator;
+    }
+
+    public function resizeAndUpload(UploadedFile $file, FolderInterface $folder, $resizeOptions = [])
+    {
+        $entry = $this->upload($file, $folder);
+
+        $type = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+        if (in_array($type, config('anomaly.module.files::mimes.types.image'))) {
+
+            $image = Image::make($file->getRealPath());
+
+            if (!empty($resizeOptions)) {
+                $image->resize($resizeOptions['width'], $resizeOptions['height'], function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+            }
+
+            $resizedImageContent = $image->encode($file->getClientOriginalExtension(), $resizeOptions['quality']);
+
+            $resizedPath = $folder->getSlug() . '/resized-' . FileSanitizer::clean($file->getClientOriginalName());
+
+            $resizedEntry = $this->manager->disk($folder->getDisk()->getSlug())->write($resizedPath, $resizedImageContent);
+            $this->files->save(
+                $resizedEntry
+                    ->setAttribute('size', strlen($resizedImageContent))
+                    ->setAttribute('width', $resizeOptions['width'])
+                    ->setAttribute('height', $resizeOptions['height'])
+                    ->setAttribute('mime_type', $file->getMimeType())
+            );
+
+            return $resizedEntry;
+        }
+
+        return $entry;
     }
 
     /**
