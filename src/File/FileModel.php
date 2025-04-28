@@ -28,7 +28,7 @@ class FileModel extends FilesFilesEntryModel implements FileInterface
      *
      * @var bool
      */
-    protected $versionable = true;
+    protected $versionable = false;
 
     /**
      * Always eager load these.
