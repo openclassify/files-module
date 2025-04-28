@@ -58,8 +58,8 @@ class FilesModuleServiceProvider extends AddonServiceProvider
      * @var array
      */
     protected $bindings = [
-        FilesFilesEntryModel::class   => FileModel::class,
-        FilesDisksEntryModel::class   => DiskModel::class,
+        FilesFilesEntryModel::class => FileModel::class,
+        FilesDisksEntryModel::class => DiskModel::class,
         FilesFoldersEntryModel::class => FolderModel::class,
     ];
 
@@ -69,8 +69,8 @@ class FilesModuleServiceProvider extends AddonServiceProvider
      * @var array
      */
     protected $singletons = [
-        FileRepositoryInterface::class   => FileRepository::class,
-        DiskRepositoryInterface::class   => DiskRepository::class,
+        FileRepositoryInterface::class => FileRepository::class,
+        DiskRepositoryInterface::class => DiskRepository::class,
         FolderRepositoryInterface::class => FolderRepository::class,
     ];
 
@@ -80,57 +80,57 @@ class FilesModuleServiceProvider extends AddonServiceProvider
      * @var array
      */
     protected $routes = [
-        'admin/files'                       => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@index',
-        'admin/files/where'                 => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@where',
-        'admin/files/move'                  => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@move',
-        'admin/files/upload/choose'         => 'Anomaly\FilesModule\Http\Controller\Admin\UploadController@choose',
-        'admin/files/upload/handle'         => 'Anomaly\FilesModule\Http\Controller\Admin\UploadController@upload',
-        'admin/files/upload/recent'         => 'Anomaly\FilesModule\Http\Controller\Admin\UploadController@recent',
-        'admin/files/upload/{folder}'       => 'Anomaly\FilesModule\Http\Controller\Admin\UploadController@index',
-        'admin/files/edit/{id}'             => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@edit',
-        'admin/files/view/{id}'             => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@view',
-        'admin/files/exists/{folder}'       => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@exists',
-        'admin/files/folders'               => 'Anomaly\FilesModule\Http\Controller\Admin\FoldersController@index',
-        'admin/files/folders/create'        => 'Anomaly\FilesModule\Http\Controller\Admin\FoldersController@create',
-        'admin/files/folders/edit/{id}'     => 'Anomaly\FilesModule\Http\Controller\Admin\FoldersController@edit',
-        'admin/files/disks'                 => 'Anomaly\FilesModule\Http\Controller\Admin\DisksController@index',
-        'admin/files/disks/choose'          => 'Anomaly\FilesModule\Http\Controller\Admin\DisksController@choose',
-        'admin/files/disks/create'          => 'Anomaly\FilesModule\Http\Controller\Admin\DisksController@create',
-        'admin/files/disks/edit/{id}'       => 'Anomaly\FilesModule\Http\Controller\Admin\DisksController@edit',
+        'admin/files' => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@index',
+        'admin/files/where' => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@where',
+        'admin/files/move' => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@move',
+        'admin/files/upload/choose' => 'Anomaly\FilesModule\Http\Controller\Admin\UploadController@choose',
+        'admin/files/upload/handle' => 'Anomaly\FilesModule\Http\Controller\Admin\UploadController@upload',
+        'admin/files/upload/recent' => 'Anomaly\FilesModule\Http\Controller\Admin\UploadController@recent',
+        'admin/files/upload/{folder}' => 'Anomaly\FilesModule\Http\Controller\Admin\UploadController@index',
+        'admin/files/edit/{id}' => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@edit',
+        'admin/files/view/{id}' => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@view',
+        'admin/files/exists/{folder}' => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@exists',
+        'admin/files/folders' => 'Anomaly\FilesModule\Http\Controller\Admin\FoldersController@index',
+        'admin/files/folders/create' => 'Anomaly\FilesModule\Http\Controller\Admin\FoldersController@create',
+        'admin/files/folders/edit/{id}' => 'Anomaly\FilesModule\Http\Controller\Admin\FoldersController@edit',
+        'admin/files/disks' => 'Anomaly\FilesModule\Http\Controller\Admin\DisksController@index',
+        'admin/files/disks/choose' => 'Anomaly\FilesModule\Http\Controller\Admin\DisksController@choose',
+        'admin/files/disks/create' => 'Anomaly\FilesModule\Http\Controller\Admin\DisksController@create',
+        'admin/files/disks/edit/{id}' => 'Anomaly\FilesModule\Http\Controller\Admin\DisksController@edit',
         'admin/files/upload/{disk}/{path?}' => [
-            'uses'        => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@upload',
+            'uses' => 'Anomaly\FilesModule\Http\Controller\Admin\FilesController@upload',
             'constraints' => [
                 'disk' => '^[a-z0-9_]+$',
                 'path' => '(.*)',
             ],
         ],
-        'files/{folder}/{name}'             => [
-            'as'          => 'anomaly.module.files::files.view',
-            'uses'        => 'Anomaly\FilesModule\Http\Controller\FilesController@read',
+        'files/{folder}/{name}' => [
+            'as' => 'anomaly.module.files::files.view',
+            'uses' => 'Anomaly\FilesModule\Http\Controller\FilesController@read',
             'constraints' => [
                 'disk' => '^[a-z0-9_]+$',
                 'path' => '(.*)',
             ],
         ],
-        'files/thumb/{folder}/{name}'       => [
-            'as'          => 'anomaly.module.files::files.thumbnail',
-            'uses'        => 'Anomaly\FilesModule\Http\Controller\FilesController@thumbnail',
+        'files/thumb/{folder}/{name}' => [
+            'as' => 'anomaly.module.files::files.thumbnail',
+            'uses' => 'Anomaly\FilesModule\Http\Controller\FilesController@thumbnail',
             'constraints' => [
                 'disk' => '^[a-z0-9_]+$',
                 'path' => '(.*)',
             ],
         ],
-        'files/stream/{folder}/{name}'      => [
-            'as'          => 'anomaly.module.files::files.stream',
-            'uses'        => 'Anomaly\FilesModule\Http\Controller\FilesController@stream',
+        'files/stream/{folder}/{name}' => [
+            'as' => 'anomaly.module.files::files.stream',
+            'uses' => 'Anomaly\FilesModule\Http\Controller\FilesController@stream',
             'constraints' => [
                 'disk' => '^[a-z0-9_]+$',
                 'path' => '(.*)',
             ],
         ],
-        'files/download/{folder}/{name}'    => [
-            'as'          => 'anomaly.module.files::files.download',
-            'uses'        => 'Anomaly\FilesModule\Http\Controller\FilesController@download',
+        'files/download/{folder}/{name}' => [
+            'as' => 'anomaly.module.files::files.download',
+            'uses' => 'Anomaly\FilesModule\Http\Controller\FilesController@download',
             'constraints' => [
                 'disk' => '^[a-z0-9_]+$',
                 'path' => '(.*)',
@@ -147,7 +147,7 @@ class FilesModuleServiceProvider extends AddonServiceProvider
      */
     public function map(FieldRouter $fields, VersionRouter $versions, AssignmentRouter $assignments)
     {
-        $versions->route($this->addon, VersionsController::class);
+        //$versions->route($this->addon, VersionsController::class);
 
         $fields->route($this->addon, FieldsController::class);
         $assignments->route($this->addon, AssignmentsController::class, 'admin/files/folders');
